@@ -9,6 +9,7 @@ Create the following secrets based on your DocuSign account
 
 ### General synopsis
 
+* API Specifications = http://docusign.github.io/docusign-esign-node-client/ 
 * index.js = main program
 * docs.js = functions that return documents for quick changing/tweaking
 * makeenvelope.js = function to create envelope using passed in arguments
