@@ -1,3 +1,5 @@
+const { JSDOM } = require("jsdom");
+const { window } = new JSDOM();
 const docusign = require("docusign-esign");
 const open = require("open"); // use your systems browser to open links
 const { exit } = require("process"); 
@@ -18,12 +20,10 @@ let apiBasePath = "https://demo.docusign.net/restapi"; // https://docusign.net i
 let consentUrl = `https://${oAuthBasePath}/oauth/auth?response_type=code&scope=impersonation+${scopes}&client_id=${integrationKey}&redirect_uri=${redirectUri}`;
 
 const envelopeArgs = {
-  signerEmail: "rboesch@compliancesystems.com",
+  signerEmail: "sbadoc.test@gmail.com",
   signerName: "Billy Kid",
   recipientId: "1",
   clientUserId: "123",
-  ccEmail: "currently.ignored@gmail.com",
-  ccName: "Not Using",
   status: "sent"
 };
 
@@ -146,11 +146,17 @@ DS.createRecipientView = async function _createRecipientView(accessToken, envId)
     console.log("\n" + "-----> About to get accessToken and accountId " + "\n");
     await DS.getJWT();
     await DS.getUserInfo(accessToken);
-    
+
+    const start = window.performance.now();
+
     console.log("\n" + "-----> About to create an Envelope" + "\n");
     let e = await DS.createEnvelope(accessToken);
     let envelopeId = e.envelopeId;
-    
+
+    const stop = window.performance.now()
+
+    console.log("\n" + `Time Taken to create envelope = ${(stop - start)/1000} seconds`);
+
     console.log("\n" + "-----> About to create a signing link" + "\n");
     let url = await DS.createRecipientView(accessToken, envelopeId);
     console.log(url);
@@ -160,3 +166,7 @@ DS.createRecipientView = async function _createRecipientView(accessToken, envId)
     await DS.getEnvelope(accessToken, "8f907f25-b52f-4ef2-a920-6fc997b93c41");   
     */
 })();
+
+
+
+
