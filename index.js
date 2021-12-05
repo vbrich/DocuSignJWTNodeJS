@@ -1,13 +1,13 @@
 const { JSDOM } = require("jsdom");
 const { window } = new JSDOM();
 const docusign = require("docusign-esign");
-const open = require("open"); // use your systems browser to open links
+const open = require("open"); 
 const { exit } = require("process"); 
 const envelopeCreator = require("./makeenvelope"); 
-const impersonationUserGuid = process.env['userid']; // The DocuSign userID we are impersonating
-const integrationKey =  process.env['integrationkey']; // From your DocuSign App config
-const rsaKey = process.env['privatekey']; // From your DocuSign App config
-const redirectUri = " https://httpbin.org/get"; // From your DocuSign App config
+const impersonationUserGuid = process.env['userid']; 
+const integrationKey = process.env['integrationkey']; 
+const rsaKey = process.env['privatekey']; 
+const redirectUri = process.env['redirecturi']; 
 let accessToken, expiry, accountId; 
 let scopes = "signature"; // 'signature' is for eSignature
 let oAuthBasePath = "account-d.docusign.com"; // don't put the https://, also account.docusign.com is prod 
