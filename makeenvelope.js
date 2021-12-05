@@ -78,9 +78,9 @@ function makeEnvelope(args) {
   doc14.documentId = "14";
   doc15.documentId = "15";
 
-  env.documents = [doc3, doc2, doc1, doc4];
+  env.documents = [doc3, doc2, doc1, doc4]; // order of array dictates order in envelope
 
-  // env.documents = [doc1, doc2, doc3, doc4, doc5, doc6, doc7, doc8, doc9, doc10, doc11, doc12, doc13, doc14, doc15]; // order of array determines order in envelope
+  // env.documents = [doc1, doc2, doc3, doc4, doc5, doc6, doc7, doc8, doc9, doc10, doc11, doc12, doc13, doc14, doc15]; 
 
   let signer1 = docusign.Signer.constructFromObject({
     email: args.signerEmail,
@@ -100,6 +100,8 @@ function makeEnvelope(args) {
     documentId: "1",
     recipientId: "1"
   });
+
+  // Anchor tags for PDF
   let signHere2 = docusign.SignHere.constructFromObject({
     anchorString: "By signing this Agreement to Provide Insurance",
     anchorYOffset: "20",

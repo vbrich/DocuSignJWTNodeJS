@@ -4,19 +4,16 @@ const docusign = require("docusign-esign");
 const open = require("open"); 
 const { exit } = require("process"); 
 const envelopeCreator = require("./makeenvelope"); 
+
 const impersonationUserGuid = process.env['userid']; 
 const integrationKey = process.env['integrationkey']; 
 const rsaKey = process.env['privatekey']; 
 const redirectUri = process.env['redirecturi']; 
-let accessToken, expiry, accountId; 
-let scopes = "signature"; // 'signature' is for eSignature
-let oAuthBasePath = "account-d.docusign.com"; // don't put the https://, also account.docusign.com is prod 
-let apiBasePath = "https://demo.docusign.net/restapi"; // https://docusign.net is prod
 
-// DocuSign uses the AuthCodeGrant consent flow on top of the JWT security
-// 1 - When we first grant consent, we need 'impersonation' to grant JWT future consent
-// 2 - Outside of that first call, it is not needed. 
-// 3 - If you dont include 'impersonation' during consent, the JWT request user token method will return 'consent_required'
+let accessToken, expiry, accountId; 
+let scopes = "signature"; 
+let oAuthBasePath = "account-d.docusign.com"; // don't put the https:// 
+let apiBasePath = "https://demo.docusign.net/restapi"; 
 let consentUrl = `https://${oAuthBasePath}/oauth/auth?response_type=code&scope=impersonation+${scopes}&client_id=${integrationKey}&redirect_uri=${redirectUri}`;
 
 const envelopeArgs = {
@@ -27,13 +24,8 @@ const envelopeArgs = {
   status: "sent"
 };
 
-// Setting a global DocuSign (DS) object so we can reuse the function elseware (function expressions)
-let DS = {};
+let DS = {}; // Global object to reuse functions elsware (function expressions)
 
-// Sets the accessToken and expiry variables
-// 1 - 3600 is 1 hour for our JWT, with no refresh token
-// 2 - AuthCodeGrant is 8 hours plus a 30 day refresh token, then a new login required
-// 3 - Ignore the code that comes back from the consent call when using JWT. That is specific to AuthCodeGrant
 DS.getJWT = async function _getJWT() {
     try {
         let apiClient = new docusign.ApiClient();
@@ -43,7 +35,7 @@ DS.getJWT = async function _getJWT() {
         expiry = response.body.expires_in; 
         accessToken = response.body.access_token; 
         // console.log(response.body);
-        return { "expiry": expiry, "accessToken": accessToken }; // accessible json from module exports
+        return { "expiry": expiry, "accessToken": accessToken }; 
     } catch (err) {
         // Verify we have a response body to parse
         if (err.response) {
@@ -60,8 +52,7 @@ DS.getJWT = async function _getJWT() {
         }
     }
 };
-
-// Note: We are pulling accountId from the impersonated userID to support multiple org accounts  
+ 
 DS.getUserInfo = async function _getUserInfo(accessToken){
     try {        
         let apiClient = new docusign.ApiClient();
