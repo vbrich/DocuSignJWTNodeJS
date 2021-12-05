@@ -11,7 +11,7 @@ function makeEnvelope(args) {
   let htmlDef = new docusign.DocumentHtmlDefinition();
   htmlDef.source = Buffer.from(docs.htmldoc1()).toString("utf8");
   doc1.htmlDefinition = htmlDef; 
-  doc1.name = "Document1"; 
+  doc1.name = "Document 1"; 
   doc1.documentId = "1"; 
   
   // Document 2 as HTML
@@ -19,7 +19,7 @@ function makeEnvelope(args) {
   let htmlDef2 = new docusign.DocumentHtmlDefinition();
   htmlDef2.source = Buffer.from(docs.htmldoc2()).toString("utf8");
   doc2.htmlDefinition = htmlDef2;
-  doc2.name = "Document2";
+  doc2.name = "Document 2";
   doc2.documentId = "2";
 
   // Document 3 as HTML to convert to PDF on upload
@@ -27,7 +27,7 @@ function makeEnvelope(args) {
   let doc3b64 = Buffer.from(docs.htmldoc3()).toString("base64");
   doc3.documentBase64 = doc3b64; 
   doc3.fileExtension = "html";  
-  doc3.name = "Document3";
+  doc3.name = "Document 3";
   doc3.documentId = "3";
 
   // Shallow copy Doc2 (HTML) a bunch of times

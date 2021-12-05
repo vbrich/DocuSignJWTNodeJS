@@ -81,10 +81,8 @@ DS.getEnvelope = async function _getEnvelope(accessToken, envelopeId) {
       dsApiClient.setBasePath(apiBasePath);
       dsApiClient.addDefaultHeader('Authorization', 'Bearer ' + accessToken);
       let envelopesApi = new docusign.EnvelopesApi(dsApiClient);
-
       let response = await envelopesApi.getEnvelope(accountId, envelopeId, null);
-      console.log(response);
-      return;
+      return response;
   } catch (err) {
     console.error(err);
   }
@@ -110,7 +108,7 @@ DS.createEnvelope = async function _createEnvelope(accessToken) {
       results = await envelopesApi.createEnvelope(accountId, {envelopeDefinition: envelope});
       let envelopeId = results.envelopeId;
 
-      console.log(`Envelope was created with ID = ${envelopeId}`);
+      console.log(`>>> Envelope was created with ID = ${envelopeId}`);
       return {envelopeId: envelopeId};
   } catch (err) {
     console.error(err);
@@ -143,28 +141,31 @@ DS.createRecipientView = async function _createRecipientView(accessToken, envId)
 
 // IIFE = Immediately Invoked Function Expression (runs as soon as it is described)
 (async () => {    
-    console.log("\n" + "-----> About to get accessToken and accountId " + "\n");
+    const timeStart = window.performance.now();
+
+    console.log("\n" + "----- ABOUT TO GET ACCESSTOKEN AND ACCOUNTID -----" + "\n");
     await DS.getJWT();
     await DS.getUserInfo(accessToken);
+    const timeTokenReceived = window.performance.now();
+    console.log("\n" + `>>> Time taken to get token = ${(timeTokenReceived - timeStart)/1000} seconds`);
 
-    const start = window.performance.now();
+    console.log("\n" + "----- ABOUT TO CREATE ENVELOPE -----" + "\n");
+    let env = await DS.createEnvelope(accessToken);
+    let envelopeId = env.envelopeId;
+    const timeEnvelopeCreated = window.performance.now();
+    console.log("\n" + `>>> Time taken to create envelope = ${(timeEnvelopeCreated - timeTokenReceived)/1000} seconds`);
 
-    console.log("\n" + "-----> About to create an Envelope" + "\n");
-    let e = await DS.createEnvelope(accessToken);
-    let envelopeId = e.envelopeId;
-
-    const stop = window.performance.now()
-
-    console.log("\n" + `Time Taken to create envelope = ${(stop - start)/1000} seconds`);
-
-    console.log("\n" + "-----> About to create a signing link" + "\n");
+    console.log("\n" + "----- ABOUT TO CREATE SIGNING LINK -----" + "\n");
     let url = await DS.createRecipientView(accessToken, envelopeId);
     console.log(url);
+    const timeLinkCreated = window.performance.now();
+    console.log("\n" + `>>> Time taken to get link = ${(timeLinkCreated - timeEnvelopeCreated)/1000} seconds`);    
     
-    /*
-    console.log("\n" + "-----> About to get Envelope" + "\n");
-    await DS.getEnvelope(accessToken, "8f907f25-b52f-4ef2-a920-6fc997b93c41");   
-    */
+    console.log("\n" + "----- ABOUT TO GET ENVELOPE -----" + "\n");
+    let createdEnvelope = await DS.getEnvelope(accessToken, envelopeId);
+    const timeEnvelopeReceived = window.performance.now();
+    // console.log(createdEnvelope);
+    console.log("\n" + `>>> Time taken to get envelope = ${(timeEnvelopeReceived - timeLinkCreated)/1000} seconds`);   
 })();
 
 
