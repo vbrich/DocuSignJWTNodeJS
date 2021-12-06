@@ -7,13 +7,6 @@ Create the following secrets based on your DocuSign account
 * privatekey = Cut/paste your RSA private key here
 * redirecturi = Cut/paste the redirect uri you set in your DocuSign API app
 
-### General synopsis
-
-* API Specifications = http://docusign.github.io/docusign-esign-node-client/ 
-* index.js = main program
-* docs.js = functions that return documents for quick changing/tweaking
-* makeenvelope.js = function to create envelope using passed in arguments
-
 ### Authentication Details
 
 DocuSign uses the AuthCodeGrant consent flow on top of the JWT security
@@ -31,7 +24,6 @@ Note: You want to pull accountId from the impersonated userID to support multipl
 
 1. 3600 is 1 hour for our JWT, with no refresh token
 2. AuthCodeGrant is 8 hours plus a 30 day refresh token, then a new login required
-3. Ignore the code that comes back from the consent call when using JWT. That is specific to AuthCodeGrant
 
  
 

@@ -6,42 +6,44 @@ function makeEnvelope(args) {
   let env = new docusign.EnvelopeDefinition();
   env.emailSubject = "DocuSign REPLIT Example";
 
-  // Document 1 is HTML sent to be signed as HTML
+  // Responsive Option 1 = HTML sent via htmlDefinition
   let docAsHtml = new docusign.Document();
   let htmlDef = new docusign.DocumentHtmlDefinition();
   htmlDef.source = Buffer.from(docs.htmldoc1()).toString("utf8");
   docAsHtml.htmlDefinition = htmlDef; 
   docAsHtml.name = "AuthorizationToReleasePayoff.html"; 
   docAsHtml.documentId = "1"; 
-   
-  // Document 2 is HTML sent to be signed as HTML
-  let docAsHtml2 = new docusign.Document();
-  let htmlDef2 = new docusign.DocumentHtmlDefinition();
-  htmlDef2.source = Buffer.from(docs.htmldoc2()).toString("utf8");
-  docAsHtml2.htmlDefinition = htmlDef2;
-  docAsHtml2.name = "LawCAAuthorize.html";
-  docAsHtml2.documentId = "1";
 
-  // Document 3 is HTML sent to be PDF at signing
-  // LemonLaw.html
+  // Responsive Option 2 = PDF sent via htmlDefinition
+  let docAsHtmlToPdf = new docusign.Document();
+  let htmlDef2 = new docusign.DocumentHtmlDefinition();
+  htmlDef2.source = "document";
+  htmlDef2.showMobileOptimizedToggle = "true",
+  docAsHtmlToPdf.htmlDefinition = htmlDef2; 
+  docAsHtmlToPdf.documentBase64 = docs.pdfdoc1();
+  docAsHtmlToPdf.name = "AgreementToProvideInsurance.pdf"; 
+  docAsHtmlToPdf.documentId = "2"; 
+
+  // Non-Responsive HTML = Send HTML as base64 to be converted to PDF for signing
   let docAsHtmlBase64 = new docusign.Document();
-  let docb64 = Buffer.from(docs.htmldoc3()).toString("base64");
+  let docb64 = Buffer.from(docs.htmldoc2()).toString("base64");
   docAsHtmlBase64.documentBase64 = docb64; 
   docAsHtmlBase64.fileExtension = "html";  
-  docAsHtmlBase64.name = "Doc.base64";
-  docAsHtmlBase64.documentId = "1";
+  docAsHtmlBase64.name = "LemonLaw.base64";
+  docAsHtmlBase64.documentId = "3";
 
-  // Document 4 is direct PDF
-  // AgreementToProvideInsurance.pdf
+  // Non-Responsive PDF = Send PDF as PDF
   let docAsPdf = new docusign.Document();
   docAsPdf.documentBase64 = docs.pdfdoc1();
   docAsPdf.fileExtension = "pdf";
-  docAsPdf.name = "Doc.pdf"; 
-  docAsPdf.documentId = "1"; 
+  docAsPdf.name = "AgreementToProvideInsurance.pdf"; 
+  docAsPdf.documentId = "4"; 
 
-  // Shallow copy a specific Documents a bunch of times
+/*
+  // TODO: Find a cleaner way to replicate docs and test
+  // Shallow copy a specific Documents a bunch of times for perfomance tests
   // NOTE: This is hardcoded as documentID 2 - 20 at the moment
-  let docType = docAsPdf;
+  let docType = docAsHtml;
   let doc2 = new docusign.Document();
   let doc3 = new docusign.Document();
   let doc4 = new docusign.Document();
@@ -100,18 +102,22 @@ function makeEnvelope(args) {
   doc19.documentId = "19";
   doc20.documentId = "20";
 
-  // NOTE: When adding your array of documents. Just keep an eye on documentIds. This is all hardcoded as I play with different combinations. Also, the signature tab below is tied to HTML/JSON
-  // NOTE: The order of array dictates order in envelope
   env.documents = [docAsHtml, doc2, doc3, doc4, doc5, doc6, doc7, doc8, doc9, doc10, doc11, doc12, doc13, doc14, doc15, doc16, doc17, doc18, doc19, doc20];
 
-  // TODO: Test various scenarios 
+  // Various Timing
   // 1 HTML = 3.5s
   // 20 HTML = 55s
   // 20 HTML + 1 PDF = 57s
   // 1 HTML + 20 htmlbase64 (PDF) = 18s
   // 1 HTML + 20 PDF = 12 seconds
   // 20 PDF = 9 seconds
-  
+  // 20 PDF as HTML = 9 seconds
+*/
+
+  // NOTE: The order of array dictates order in envelope
+  // NOTE: If you don't send docAsHtml, remove the signHere1 from the tabs below!
+  env.documents = [docAsHtml, docAsHtmlBase64, docAsHtmlToPdf, docAsPdf];
+
   let signer1 = docusign.Signer.constructFromObject({
     email: args.signerEmail,
     name: args.signerName,
