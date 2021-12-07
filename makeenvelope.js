@@ -15,14 +15,14 @@ function makeEnvelope(args) {
   docAsHtml.documentId = "1"; 
 
   // Responsive Option 2 = PDF sent via htmlDefinition
-  let docAsHtmlToPdf = new docusign.Document();
+  let docAsPDFToHtml = new docusign.Document();
   let htmlDef2 = new docusign.DocumentHtmlDefinition();
   htmlDef2.source = "document";
   htmlDef2.showMobileOptimizedToggle = "true",
-  docAsHtmlToPdf.htmlDefinition = htmlDef2; 
-  docAsHtmlToPdf.documentBase64 = docs.pdfdoc1();
-  docAsHtmlToPdf.name = "AgreementToProvideInsurance.pdf"; 
-  docAsHtmlToPdf.documentId = "2"; 
+  docAsPDFToHtml.htmlDefinition = htmlDef2; 
+  docAsPDFToHtml.documentBase64 = docs.pdfdoc1();
+  docAsPDFToHtml.name = "AgreementToProvideInsurance.pdf"; 
+  docAsPDFToHtml.documentId = "2"; 
 
   // Non-Responsive HTML = Send HTML as base64 to be converted to PDF for signing
   let docAsHtmlBase64 = new docusign.Document();
@@ -40,9 +40,8 @@ function makeEnvelope(args) {
   docAsPdf.documentId = "4"; 
 
 /*
-  // TODO: Find a cleaner way to replicate docs and test
-  // Shallow copy a specific Documents a bunch of times for perfomance tests
-  // NOTE: This is hardcoded as documentID 2 - 20 at the moment
+  // TODO: Temparily, wanted a quick way to test multiple files...
+  // Shallow copy a specific Documents a bunch of times
   let docType = docAsHtml;
   let doc2 = new docusign.Document();
   let doc3 = new docusign.Document();
@@ -116,7 +115,7 @@ function makeEnvelope(args) {
 
   // NOTE: The order of array dictates order in envelope
   // NOTE: If you don't send docAsHtml, remove the signHere1 from the tabs below!
-  env.documents = [docAsHtml, docAsHtmlBase64, docAsHtmlToPdf, docAsPdf];
+  env.documents = [docAsHtml, docAsPdf];
 
   let signer1 = docusign.Signer.constructFromObject({
     email: args.signerEmail,

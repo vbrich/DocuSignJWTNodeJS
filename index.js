@@ -156,7 +156,8 @@ DS.createRecipientView = async function _createRecipientView(accessToken, envId)
     let createdEnvelope = await DS.getEnvelope(accessToken, envelopeId);
     const timeEnvelopeReceived = window.performance.now();
     // console.log(createdEnvelope);
-    console.log("\n" + `>>> Time taken to get envelope = ${(timeEnvelopeReceived - timeLinkCreated)/1000} seconds`);   
+    console.log("\n" + `>>> Time taken to get envelope = ${(timeEnvelopeReceived - timeLinkCreated)/1000} seconds`); 
+ 
 })();
 
 

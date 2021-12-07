@@ -12,6 +12,7 @@
   "dependencies": {
     "console-stamp": "^3.0.3",
     "docusign-esign": "^5.12.0",
+    "jest-environment-jsdom": "^27.4.3",
     "jsdom": "^19.0.0",
     "open": "^8.4.0"
   }
