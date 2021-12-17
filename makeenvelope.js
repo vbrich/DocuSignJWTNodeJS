@@ -6,34 +6,53 @@ function makeEnvelope(args) {
 
   let env = new docusign.EnvelopeDefinition();
   env.emailSubject = "DocuSign REPLIT Example";
-
+  
   // Responsive Option 1 = HTML sent via htmlDefinition
-  let docAsHtml = createHtmlDefinitionDoc('AgreementNotExport.html');
+  let docAsHtml = createHtmlDefinitionDoc('1_AgreementNotExport.html');
   docAsHtml.documentId = "1"; 
-  let docAsHtml2 = createHtmlDefinitionDoc('91581_DCAP_CO.html');
+  let docAsHtml2 = createHtmlDefinitionDoc('2_91581_DCAP_CO.html');
   docAsHtml2.documentId = "2"; 
-  let docAsHtml3 = createHtmlDefinitionDoc('88352_WA_DMV_LemonLaw.html');
+  let docAsHtml3 = createHtmlDefinitionDoc('3_88352_WA_DMV_LemonLaw.html');
   docAsHtml3.documentId = "3"; 
-  let docAsHtml4 = createHtmlDefinitionDoc('85821 DCAP WA Payoff Release.html');
+  let docAsHtml4 = createHtmlDefinitionDoc('4_85821 DCAP WA Payoff Release.html');
   docAsHtml4.documentId = "4"; 
-  let docAsHtml5 = createHtmlDefinitionDoc('43894_Law_Contract.html');
+  let docAsHtml5 = createHtmlDefinitionDoc('5_43894_Law_Contract.html');
   docAsHtml5.documentId = "5"; 
+  let docAsHtml6 = createHtmlDefinitionDoc('6_RetailSpotDelivery.html');
+  docAsHtml6.documentId = "6"; 
+  let docAsHtml7 = createHtmlDefinitionDoc('7_92844_Odometer.html');
+  docAsHtml7.documentId = "7"; 
+  let docAsHtml8 = createHtmlDefinitionDoc('8_CreditScoreSummary.html');
+  docAsHtml8.documentId = "8";
 
+
+/*
   // Responsive Option 2 = PDF sent via htmlDefinition
   let docAsPDFResponsive = createResponsivePdfDoc("Responsive.pdf", docs.pdfdoc1());
-  docAsPDFResponsive.documentId = "6"; 
+  docAsPDFResponsive.documentId = "9"; 
 
   // Non-Responsive HTML = Send HTML as base64 to be converted to PDF for signing  
-  let docAsHtmlBase64 = createHtmlBase64Doc('AgreementNotExport.html');
-  docAsHtmlBase64.documentId = "7";
+  let docAsHtmlBase64 = createHtmlBase64Doc('1_AgreementNotExport.html');
+  docAsHtmlBase64.documentId = "9";
 
   // Non-Responsive PDF = Send PDF as PDF
   let docAsPdf = createBasicPdfDoc("Normal.pdf", docs.pdfdoc1());
-  docAsPdf.documentId = "8"; 
+  docAsPdf.documentId = "9"; 
+*/
+
+// let docTest = createHtmlDefinitionDoc('Test2.html');
+// docTest.documentId = "1";
 
   // NOTE: The order of array dictates order in envelope
-  // TODO: If you don't send docAsHtml, remove the signHere1 from the tabs below!
-  env.documents = [docAsHtml];
+  env.documents = [docAsHtml, docAsHtml7, docAsHtml8];
+
+
+
+
+
+
+
+
 
   let signer1 = docusign.Signer.constructFromObject({
     email: args.signerEmail,
